@@ -1,0 +1,14 @@
+services:
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: "none"
+    ports:
+      - 1025:1025
+      - 8025:8025
+  database:
+    image: "postgres:latest"
+    env_file:
+      - ".env.development"
+    ports:
+      - "5432:5432"
