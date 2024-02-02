@@ -1,10 +1,13 @@
-import { prisma } from "@/lib/prisma";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { Adapter } from "next-auth/adapters";
-import GitHubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
-export const authOptions = {
+import { Adapter } from "next-auth/adapters";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+
+import { prisma } from "@/lib/prisma";
+import { NextAuthOptions } from "next-auth";
+
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GitHubProvider({
@@ -16,5 +19,12 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET!,
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/error",
+    // verifyRequest: '/auth/verify-request',
+    newUser: "/auth/new-user",
+  },
+  // secret: process.env.NEXTAUTH_SECRET!,
 };
