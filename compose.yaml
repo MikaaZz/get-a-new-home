@@ -8,6 +8,8 @@ services:
       - 8025:8025
   database:
     image: "postgres:latest"
+    container_name: get-a-new-home
+
     env_file:
       - ".env.development"
     ports:

@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/shared/session-provider/SessionProvider";
 import TopBar from "@/components/shared/top-bar/TopBar";
 import { authOptions } from "@/utils/authOptions";
+import { ThemeProvider } from "@/components/shared/theme-provider/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Key Change",
