@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Account {
@@ -27,6 +28,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -35,6 +37,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -74,21 +78,26 @@ model Profile {
 model Home {
   id          String     @id @default(cuid())
   description String?
+  title       String
   user        User       @relation(fields: [userId], references: [id])
   userId      String
-  category    Category   @relation(fields: [categoryId], references: [id])
-  categoryId  String
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  categoryId  String?
   location    String
   value       Int
   images      Image[]
   favorites   Favorite[]
   reviews     Review[]
   bookings    Booking[]
+
+  @@index([userId])
+  @@index([categoryId])
 }
 
 model Category {
-  id   String @id @default(cuid())
-  home Home[]
+  id    String @id @default(cuid())
+  home  Home[]
+  title String
 }
 
 model Image {
@@ -97,6 +106,8 @@ model Image {
   altText String
   home    Home   @relation(fields: [homeId], references: [id], onDelete: Cascade)
   homeId  String
+
+  @@index([homeId])
 }
 
 model Message {
@@ -109,6 +120,10 @@ model Message {
   recipientId    String
   conversation   Conversation? @relation(fields: [conversationId], references: [id])
   conversationId String?
+
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([conversationId])
 }
 
 model Favorite {
@@ -119,6 +134,7 @@ model Favorite {
   homeId String
 
   @@unique([userId, homeId])
+  @@index([homeId])
 }
 
 model Review {
@@ -132,6 +148,7 @@ model Review {
   homeId    String
 
   @@unique([userId, homeId])
+  @@index([homeId])
 }
 
 model Booking {
@@ -143,6 +160,9 @@ model Booking {
   userId    String
   home      Home     @relation(fields: [homeId], references: [id])
   homeId    String
+
+  @@index([userId])
+  @@index([homeId])
 }
 
 model Notification {
@@ -153,6 +173,8 @@ model Notification {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
+
+  @@index([userId])
 }
 
 model Conversation {
