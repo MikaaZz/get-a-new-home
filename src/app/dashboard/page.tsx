@@ -1,6 +1,8 @@
 import Typography from "@/components/shared/typography/Typography";
 import OptionsCard from "./components/OptionsCard";
 import { OptionsCardProps } from "./@types";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const optionsCardsInfos: OptionsCardProps[] = [
   {
@@ -34,6 +36,10 @@ export default function Page() {
         ))}
       </div>
       <Typography variant="T_Medium_H2">Welcome to your dashboard</Typography>
+      <Typography variant="T_Medium_H3">Register your home here</Typography>
+      <Link href={"/dashboard/management"}>
+        <Button>Register</Button>
+      </Link>
     </div>
   );
 }

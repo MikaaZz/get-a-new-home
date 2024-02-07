@@ -6,6 +6,7 @@ import GitHubProvider from "next-auth/providers/github";
 
 import { prisma } from "@/lib/prisma";
 import { NextAuthOptions } from "next-auth";
+import { randomBytes, randomUUID } from "crypto";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -19,6 +20,14 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_SECRET!,
     }),
   ],
+  session: {
+    strategy: "database",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 horas
+    generateSessionToken: () => {
+      return randomUUID?.() ?? randomBytes(32).toString("hex");
+    },
+  },
   pages: {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
