@@ -29,17 +29,16 @@ const optionsCardsInfos: OptionsCardProps[] = [
 
 export default function Page() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-8">
+      <div className="flex flex-col items-center">
+        <Typography variant="T_Medium_H2">Welcome to your dashboard</Typography>
+        <Typography variant="T_Medium_H3">Register your home here</Typography>
+      </div>
       <div className="flex items-stretch justify-center gap-4">
         {optionsCardsInfos.map((o) => (
           <OptionsCard key={o.title} {...o} />
         ))}
       </div>
-      <Typography variant="T_Medium_H2">Welcome to your dashboard</Typography>
-      <Typography variant="T_Medium_H3">Register your home here</Typography>
-      <Link href={"/dashboard/management"}>
-        <Button>Register</Button>
-      </Link>
     </div>
   );
 }

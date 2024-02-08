@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getUserSession } from "../session/get";
 
-export async function getUsersData() {
+export async function getLoggedUserData() {
   try {
     const session = await getUserSession();
     const user = await prisma.user.findUnique({

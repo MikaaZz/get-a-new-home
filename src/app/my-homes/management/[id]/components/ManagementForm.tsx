@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Prisma } from "@prisma/client";
 
 import { createHome } from "@/actions/homes/create";
-import { getUsersData } from "@/actions/users/get";
+import { getLoggedUserData } from "@/actions/users/get";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { randomBytes, randomUUID } from "crypto";
+import { ManagementFormProps } from "../@types";
+import { redirect, useRouter } from "next/navigation";
 
 const formSchema = z.object({
   title: z.string().min(2).max(50),
@@ -28,19 +29,19 @@ const formSchema = z.object({
   value: z.string().min(0),
 });
 
-export default function ManagementForm() {
+export default function ManagementForm({ home }: ManagementFormProps) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      category: "",
-      location: "",
-      value: "0",
+      title: home ? home.title : "",
+      location: home ? home.location : "",
+      value: home ? home.value.toString() : "0",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const user = await getUsersData();
+    const user = await getLoggedUserData();
 
     const newHome: Prisma.HomeCreateInput = {
       title: values.title,
@@ -50,7 +51,10 @@ export default function ManagementForm() {
     };
 
     await createHome(newHome);
+    router.push("/my-homes");
+    router.refresh();
   }
+
   return (
     <div className="max-w-4xl w-full">
       <Form {...form}>

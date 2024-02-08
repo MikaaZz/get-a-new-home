@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,17 +9,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { HomesCardProps } from "../@types";
 import Typography from "@/components/shared/typography/Typography";
 
-export default function HomeCard({
+import { HomesCardProps } from "../@types";
+
+import { getLoggedUserData } from "@/actions/users/get";
+
+export default async function HomeCard({
   title,
   description,
   location,
   value,
   route,
+  userId,
 }: HomesCardProps) {
+  const user = await getLoggedUserData();
+  console.log(`userId: ${userId}`);
+  console.log(`user?.id: ${user?.id}`);
   return (
     <Card className="min-w-72 max-w-72 justify-between flex flex-col items-start">
       <CardHeader>
@@ -33,9 +41,14 @@ export default function HomeCard({
         </div>
       </CardContent>
       <CardFooter>
-        <Link href={route}>
+        <Link href={`/homes/view/${route}`}>
           <Button className="w-full">Access</Button>
         </Link>
+        {user?.id == userId && (
+          <Link href={`/my-homes/management/${route}`}>
+            <Button className="w-full">Edit</Button>
+          </Link>
+        )}
       </CardFooter>
     </Card>
   );
