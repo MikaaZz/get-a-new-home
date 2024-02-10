@@ -1,13 +1,22 @@
-import { getHomes } from "@/actions/homes/get";
+import { getAllHomes } from "@/actions/homes/get";
 import Typography from "@/components/shared/typography/Typography";
-import HomeCard from "./components/HomesCard";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { unstable_noStore } from "next/cache";
+import HomeCard from "@/components/shared/home-card/HomeCard";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
   unstable_noStore();
-  const homes = await getHomes();
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/");
+  }
+
+  const homes = await getAllHomes();
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full">
       <div className="flex flex-col items-center gap-2">

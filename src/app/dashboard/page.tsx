@@ -1,8 +1,11 @@
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+
+import { OptionsCardProps } from "./@types";
+import { authOptions } from "@/utils/authOptions";
+
 import Typography from "@/components/shared/typography/Typography";
 import OptionsCard from "./components/OptionsCard";
-import { OptionsCardProps } from "./@types";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 const optionsCardsInfos: OptionsCardProps[] = [
   {
@@ -27,7 +30,11 @@ const optionsCardsInfos: OptionsCardProps[] = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect("/");
+  }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-8">
       <div className="flex flex-col items-center">

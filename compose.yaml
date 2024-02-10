@@ -1,11 +1,4 @@
 services:
-  mailhog:
-    image: mailhog/mailhog
-    logging:
-      driver: "none"
-    ports:
-      - 1025:1025
-      - 8025:8025
   database:
     image: "postgres:latest"
     container_name: get-a-new-home

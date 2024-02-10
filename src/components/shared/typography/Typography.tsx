@@ -88,8 +88,8 @@ const Typography: React.FC<TypographyProps> = ({
   mDelay = 0,
   variant,
   children,
-  className,
-  maxLines,
+  className = "",
+  maxLines = 0,
   navigate,
   link = "",
   target = "",
@@ -195,7 +195,7 @@ const Typography: React.FC<TypographyProps> = ({
   const content = (
     <span
       className={cn(
-        "overflow-wrap overflow-hidden leading-normal text-slate-200",
+        "overflow-wrap overflow-hidden leading-normal text-gray-900",
         animationClass,
         className,
         fontTypes,
@@ -220,12 +220,6 @@ const Typography: React.FC<TypographyProps> = ({
   ) : (
     content
   );
-};
-
-Typography.defaultProps = {
-  className: "",
-  maxLines: 0,
-  animate: "",
 };
 
 export default Typography;
